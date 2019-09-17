@@ -3,20 +3,10 @@ package ezperf;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
-import static ezperf.Assertions.assertRunsWithin;
+import static ezperf.AssertRunsWithin.assertRunsWithin;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class AssertionsTest {
-
-    private Runnable createRunable(long time) {
-        return () -> {
-            try {
-                Thread.sleep(time);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        };
-    }
+class AssertRunsWithinTest extends AbstractTest {
 
     @Test
     void shouldPassWhenTimeoutNotExceeded() {
