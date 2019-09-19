@@ -5,11 +5,11 @@ import org.opentest4j.AssertionFailedError;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class AssertRunsWithinConcurrentTest extends AbstractTest {
+class AssertRunsWithinParallelTest extends AbstractTest {
 
     @Test
     void shouldPassWhenFasterOnMultipleThreads() {
-        AssertRunsWithinConcurrent.assertRunsWithinConcurrent(createRunable(1000), 2000L);
+        AssertRunsWithinParallel.assertRunsWithinParallel(createRunable(1000), 2000L);
     }
 
     @Test
@@ -17,7 +17,7 @@ class AssertRunsWithinConcurrentTest extends AbstractTest {
         String customMessage = "custom_message";
         assertThrows(
                 AssertionFailedError.class,
-                () -> AssertRunsWithinConcurrent.assertRunsWithinConcurrent(createRunable(2000), 1000L, 10, customMessage),
+                () -> AssertRunsWithinParallel.assertRunsWithinParallel(createRunable(2000), 1000L, 10, customMessage),
                 customMessage
         );
     }
