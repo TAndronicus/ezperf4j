@@ -1,16 +1,23 @@
 package ezperf;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 class AssertRunsWithinTimeout {
 
     private static final int DEFAULT_RUN_COUNT = 10;
     private static final int SINGLE_RUN = 1;
 
     static void assertRunsWithinTimeout(Runnable f, long timeout, int fasterRuns, int totalRuns, String message) {
-        AssertionUtils.runAsyncWithTimeout(f, timeout, fasterRuns, totalRuns, message);
+        runAsyncWithTimeout(f, timeout, fasterRuns, totalRuns, Executors.newSingleThreadExecutor(), () -> AssertionUtils.fail(message));
     }
 
     static void assertRunsWithinTimeout(Runnable f, long timeout, int fasterRuns, int totalRuns) {
-        AssertionUtils.runAsyncWithTimeout(f, timeout, fasterRuns, totalRuns);
+        runAsyncWithTimeout(f, timeout, fasterRuns, totalRuns, Executors.newSingleThreadExecutor(), AssertionUtils::fail);
     }
 
     static void assertRunsWithinTimeout(Runnable f, long timeout, double percentage, String message) {
@@ -27,6 +34,20 @@ class AssertRunsWithinTimeout {
 
     static void assertRunsWithinTimeout(Runnable f, long timeout) {
         assertRunsWithinTimeout(f, timeout, SINGLE_RUN, SINGLE_RUN);
+    }
+
+    static void runAsyncWithTimeout(Runnable f, long timeout, int fasterRuns, int totalRuns, Executor executor, Runnable fail) {
+        int failedCount = 0;
+        for (int i = 0; i < totalRuns; i++) {
+            CompletableFuture task = CompletableFuture.runAsync(f, executor);
+            try {
+                task.get(timeout, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException | ExecutionException e) {
+                AssertionUtils.abort(e);
+            } catch (TimeoutException e) {
+                if (++failedCount > totalRuns - fasterRuns) fail.run();
+            }
+        }
     }
 
 }

@@ -10,7 +10,9 @@ class AssertRunsWithinTest extends AbstractTest {
 
     @Test
     void shouldPassWhenTimeoutNotExceeded() {
-        assertRunsWithin(createRunable(1000), 2000);
+        long expectedTime = 2000L;
+        long actualTime = 1000;
+        assertRunsWithin(createRunable(actualTime), expectedTime);
     }
 
     @Test
