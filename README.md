@@ -13,7 +13,7 @@ All assertions are available in single class:
 import static ezperf.Assertions.*;
 ```
 
-Prepare computation to test:
+Prepare method you would like to test:
 
 ```
 Runnable createRunable(long time) {
@@ -54,7 +54,23 @@ assertRunsWithinTimeout(createRunable(actualTime), expectedTime, 4, 5);
 // passes when at least 4 out of 5 runs fit in expected time
 ```
 
+Tests don't have to be run sequentially. You can easily parallelize them:
 
+```
+long expectedTime = 100L;
+long actualTime = 200L;
+int numberOfThreads = 10;
+assertRunsWithinParallelTimeout(createRunable(actualTime), expectedTime, numberOfThreads);
+// this will run the Runnable simultaneously on 10 threads
+```
 
-Using kotlin? Check out TODO
+And to make sure, that method runs faster than threshold on 75% of threads:
 
+```
+long expectedTime = 2500L;
+long actualTime = 2000L;
+int numberOfThreads = 16;
+double percentage = 0.75;
+assertRunsWithinParallelTimeout(createRunable(actualTime), expectedTime, numberOfThreads, percentage);
+// throws, when more than 4 out of 16 threads fail to end the task within 2500 ms
+```
