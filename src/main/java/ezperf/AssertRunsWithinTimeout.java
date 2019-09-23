@@ -20,6 +20,14 @@ class AssertRunsWithinTimeout {
         runAsyncWithTimeout(f, timeout, fasterRuns, totalRuns, Executors.newSingleThreadExecutor(), AssertionUtils::fail);
     }
 
+    static void assertRunsWithinTimeout(Runnable f, long timeout, double percentage, int totalRuns, String message) {
+        assertRunsWithinTimeout(f, timeout, (int) Math.ceil(totalRuns * percentage), totalRuns, message);
+    }
+
+    static void assertRunsWithinTimeout(Runnable f, long timeout, double percentage, int totalRuns) {
+        assertRunsWithinTimeout(f, timeout, (int) Math.ceil(totalRuns * percentage), totalRuns);
+    }
+
     static void assertRunsWithinTimeout(Runnable f, long timeout, double percentage, String message) {
         assertRunsWithinTimeout(f, timeout, (int) Math.ceil(DEFAULT_RUN_COUNT * percentage), DEFAULT_RUN_COUNT, message);
     }

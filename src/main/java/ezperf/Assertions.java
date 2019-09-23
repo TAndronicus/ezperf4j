@@ -13,7 +13,7 @@ public class Assertions {
      * @param f          - method under test
      * @param time       - expected running time of {@code f}
      * @param fasterRuns - minimal number of iterations, where {@code f} runs faster than {@code time}
-     * @param totalRuns  - maximal number of iterations
+     * @param totalRuns  - number of iterations
      * @param message    - exception message
      */
     public static void assertRunsWithin(Runnable f, long time, int fasterRuns, int totalRuns, String message) {
@@ -27,14 +27,41 @@ public class Assertions {
      * @param f          - method under test
      * @param time       - expected running time of {@code f}
      * @param fasterRuns - minimal number of iterations, where {@code f} runs faster than {@code time}
-     * @param totalRuns  - maximal number of iterations
+     * @param totalRuns  - number of iterations
      */
     public static void assertRunsWithin(Runnable f, long time, int fasterRuns, int totalRuns) {
         AssertRunsWithin.assertRunsWithin(f, time, fasterRuns, totalRuns);
     }
 
     /**
-     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} of total runs (default = 10).
+     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} of {@code totalRuns} (default = 10).
+     * If not, {@code AssertionFailedError} with supplied {@code message} is thrown.
+     *
+     * @param f          - method under test
+     * @param time       - expected running time of {@code f}
+     * @param percentage - percentage of total runs (default = 10) that are expected to run faster than {@code time}
+     * @param totalRuns  - number of iterations
+     * @param message    - exception message
+     */
+    public static void assertRunsWithin(Runnable f, long time, double percentage, int totalRuns, String message) {
+        AssertRunsWithin.assertRunsWithin(f, time, percentage, totalRuns, message);
+    }
+
+    /**
+     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} of {@code totalRuns} (default = 10).
+     * If not, {@code AssertionFailedError} is thrown.
+     *
+     * @param f          - method under test
+     * @param time       - expected running time of {@code f}
+     * @param percentage - percentage of total runs (default = 10) that are expected to run faster than {@code time}
+     * @param totalRuns  - number of iterations
+     */
+    public static void assertRunsWithin(Runnable f, long time, double percentage, int totalRuns) {
+        AssertRunsWithin.assertRunsWithin(f, time, percentage, totalRuns);
+    }
+
+    /**
+     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} of {@code totalRuns} (default = 10).
      * If not, {@code AssertionFailedError} with supplied {@code message} is thrown.
      *
      * @param f          - method under test
@@ -47,7 +74,7 @@ public class Assertions {
     }
 
     /**
-     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} of total runs (default = 10).
+     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} of {@code totalRuns} (default = 10).
      * If not, {@code AssertionFailedError} is thrown.
      *
      * @param f          - method under test
@@ -216,7 +243,7 @@ public class Assertions {
      * @param f          - method under test
      * @param timeout    - expected running time of {@code f}
      * @param fasterRuns - minimal number of iterations, where {@code f} runs faster than {@code} time
-     * @param totalRuns  - maximal number of iterations
+     * @param totalRuns  - number of iterations
      * @param message    - exception message
      */
     public static void assertRunsWithinTimeout(Runnable f, long timeout, int fasterRuns, int totalRuns, String message) {
@@ -231,10 +258,39 @@ public class Assertions {
      * @param f          - method under test
      * @param timeout    - expected running time of {@code f}
      * @param fasterRuns - minimal number of iterations, where {@code f} runs faster than {@code} time
-     * @param totalRuns  - maximal number of iterations
+     * @param totalRuns  - number of iterations
      */
     public static void assertRunsWithinTimeout(Runnable f, long timeout, int fasterRuns, int totalRuns) {
         AssertRunsWithinTimeout.assertRunsWithinTimeout(f, timeout, fasterRuns, totalRuns);
+    }
+
+    /**
+     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} out of {@code totalRuns}.
+     * If {@code f} runs longer than {@code timeout}, it's interrupted.
+     * If threshold is exceeded, {@code AssertionFailedError} with supplied {@code message} is thrown.
+     *
+     * @param f          - method under test
+     * @param timeout    - expected running time of {@code f}
+     * @param percentage - minimal percentage of runs that are expected to run in time no longer than {@code timeout} (default = 1)
+     * @param totalRuns - number of iterations
+     * @param message    - exception message
+     */
+    public static void assertRunsWithinTimeout(Runnable f, long timeout, double percentage, int totalRuns, String message) {
+        AssertRunsWithinTimeout.assertRunsWithinTimeout(f, timeout, percentage, totalRuns, message);
+    }
+
+    /**
+     * Asserts, that given {@code Runnable} runs within given {@code time} in milliseconds in at least {@code percentage} out of {@code totalRuns}.
+     * If {@code f} runs longer than {@code timeout}, it's interrupted.
+     * If threshold is exceeded, {@code AssertionFailedError} is thrown.
+     *
+     * @param f          - method under test
+     * @param timeout    - expected running time of {@code f}
+     * @param percentage - minimal percentage of runs that are expected to run in time no longer than {@code timeout} (default = 1)
+     * @param totalRuns - number of iterations
+     */
+    public static void assertRunsWithinTimeout(Runnable f, long timeout, double percentage, int totalRuns) {
+        AssertRunsWithinTimeout.assertRunsWithinTimeout(f, timeout, percentage, totalRuns);
     }
 
     /**
@@ -352,10 +408,10 @@ public class Assertions {
      * If {@code f} runs longer than {@code timeout} on any of the threads, it's interrupted.
      * If threshold is exceeded, {@code AssertionFailedError} with supplied {@code message} is thrown.
      *
-     * @param f               - method under test
-     * @param timeout         - expected running time of {@code f}
-     * @param percentage      - percentage of threads (default = 1) that are expected to compute {@code f} faster than {@code timeout}
-     * @param message         - exception message
+     * @param f          - method under test
+     * @param timeout    - expected running time of {@code f}
+     * @param percentage - percentage of threads (default = 1) that are expected to compute {@code f} faster than {@code timeout}
+     * @param message    - exception message
      */
     public static void assertRunsWithinParallelTimeout(Runnable f, long timeout, double percentage, String message) {
         AssertRunsWithinParallelTimeout.assertRunsWithinParallelTimeout(f, timeout, percentage, message);
@@ -366,9 +422,9 @@ public class Assertions {
      * If {@code f} runs longer than {@code timeout} on any of the threads, it's interrupted.
      * If threshold is exceeded, {@code AssertionFailedError} is thrown.
      *
-     * @param f               - method under test
-     * @param timeout         - expected running time of {@code f}
-     * @param percentage      - percentage of threads (default = 1) that are expected to compute {@code f} faster than {@code timeout}
+     * @param f          - method under test
+     * @param timeout    - expected running time of {@code f}
+     * @param percentage - percentage of threads (default = 1) that are expected to compute {@code f} faster than {@code timeout}
      */
     public static void assertRunsWithinParallelTimeout(Runnable f, long timeout, double percentage) {
         AssertRunsWithinParallelTimeout.assertRunsWithinParallelTimeout(f, timeout, percentage);
@@ -406,9 +462,9 @@ public class Assertions {
      * If {@code f} runs longer than {@code timeout} on any of the threads, it's interrupted.
      * If threshold is exceeded, {@code AssertionFailedError} with supplied {@code message} is thrown.
      *
-     * @param f               - method under test
-     * @param timeout         - expected running time of {@code f}
-     * @param message         - exception message
+     * @param f       - method under test
+     * @param timeout - expected running time of {@code f}
+     * @param message - exception message
      */
     public static void assertRunsWithinParallelTimeout(Runnable f, long timeout, String message) {
         AssertRunsWithinParallelTimeout.assertRunsWithinParallelTimeout(f, timeout, message);
@@ -419,8 +475,8 @@ public class Assertions {
      * If {@code f} runs longer than {@code timeout} on any of the threads, it's interrupted.
      * If threshold is exceeded, {@code AssertionFailedError} is thrown.
      *
-     * @param f               - method under test
-     * @param timeout         - expected running time of {@code f}
+     * @param f       - method under test
+     * @param timeout - expected running time of {@code f}
      */
     public static void assertRunsWithinParallelTimeout(Runnable f, long timeout) {
         AssertRunsWithinParallelTimeout.assertRunsWithinParallelTimeout(f, timeout);

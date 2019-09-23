@@ -17,6 +17,14 @@ class AssertRunsWithin {
         fail();
     }
 
+    static void assertRunsWithin(Runnable f, long time, double percentage, int totalRuns, String message) {
+        assertRunsWithin(f, time, (int) Math.ceil(percentage * totalRuns), totalRuns, message);
+    }
+
+    static void assertRunsWithin(Runnable f, long time, double percentage, int totalRuns) {
+        assertRunsWithin(f, time, (int) Math.ceil(percentage * totalRuns), totalRuns);
+    }
+
     static void assertRunsWithin(Runnable f, long time, double percentage, String message) {
         assertRunsWithin(f, time, (int) Math.ceil(percentage * DEFAULT_RUN_COUNT), DEFAULT_RUN_COUNT, message);
     }
