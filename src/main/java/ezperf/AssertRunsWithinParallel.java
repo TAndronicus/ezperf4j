@@ -3,10 +3,20 @@ package ezperf;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Supplier;
 
 class AssertRunsWithinParallel {
 
     private static final int DEFAULT_NUMBER_OF_THREADS = 10;
+
+    static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads, int fasterRuns, Supplier<String> messageSupplier) {
+        try {
+            if (runInLoopParallel(f, time, numberOfThreads, fasterRuns)) return;
+            AssertionUtils.fail(messageSupplier);
+        } catch (InterruptedException e) {
+            AssertionUtils.abort(e);
+        }
+    }
 
     static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads, int fasterRuns, String message) {
         try {
@@ -26,12 +36,20 @@ class AssertRunsWithinParallel {
         }
     }
 
+    static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads, double percentage, Supplier<String> messageSupplier) {
+        assertRunsWithinParallel(f, time, numberOfThreads, (int) Math.ceil(percentage * numberOfThreads), messageSupplier);
+    }
+
     static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads, double percentage, String message) {
         assertRunsWithinParallel(f, time, numberOfThreads, (int) Math.ceil(percentage * numberOfThreads), message);
     }
 
     static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads, double percentage) {
         assertRunsWithinParallel(f, time, numberOfThreads, (int) Math.ceil(percentage * numberOfThreads));
+    }
+
+    static void assertRunsWithinParallel(Runnable f, long time, double percentage, Supplier<String> messageSupplier) {
+        assertRunsWithinParallel(f, time, DEFAULT_NUMBER_OF_THREADS, (int) Math.ceil(percentage * DEFAULT_NUMBER_OF_THREADS), messageSupplier);
     }
 
     static void assertRunsWithinParallel(Runnable f, long time, double percentage, String message) {
@@ -42,12 +60,20 @@ class AssertRunsWithinParallel {
         assertRunsWithinParallel(f, time, DEFAULT_NUMBER_OF_THREADS, (int) Math.ceil(percentage * DEFAULT_NUMBER_OF_THREADS));
     }
 
+    static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads, Supplier<String> messageSupplier) {
+        assertRunsWithinParallel(f, time, numberOfThreads, numberOfThreads, messageSupplier);
+    }
+
     static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads, String message) {
         assertRunsWithinParallel(f, time, numberOfThreads, numberOfThreads, message);
     }
 
     static void assertRunsWithinParallel(Runnable f, long time, int numberOfThreads) {
         assertRunsWithinParallel(f, time, numberOfThreads, numberOfThreads);
+    }
+
+    static void assertRunsWithinParallel(Runnable f, long time, Supplier<String> messageSupplier) {
+        assertRunsWithinParallel(f, time, DEFAULT_NUMBER_OF_THREADS, DEFAULT_NUMBER_OF_THREADS, messageSupplier);
     }
 
     static void assertRunsWithinParallel(Runnable f, long time, String message) {
