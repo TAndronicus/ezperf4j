@@ -1,4 +1,4 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.tandronicus/ezperf4j/badge.svg?style={plastic})](https://maven-badges.herokuapp.com/maven-central/com.github.tandronicus/ezperf4j/badge.svg?style={plastic})
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.tandronicus/ezperf4j/badge.svg?style={plastic})](https://search.maven.org/artifact/com.github.tandronicus/ezperf4j/0.1/jar)
 
 # ezperf4j
 Performance testing with Junit made eazy
