@@ -1,3 +1,5 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.tandronicus/ezperf4j/badge.svg?style={plastic})](https://maven-badges.herokuapp.com/maven-central/com.github.tandronicus/ezperf4j/badge.svg?style={plastic})
+
 # ezperf4j
 Performance testing with Junit made eazy
 
