@@ -1,9 +1,25 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.tandronicus/ezperf4j/badge.svg?style={plastic})](https://search.maven.org/artifact/com.github.tandronicus/ezperf4j/0.1/jar)
+
 # ezperf4j
 Performance testing with Junit made eazy
 
 ## Dependencies
 
-TODO
+Put the following in your pom.xml if you're using maven:
+
+```
+<dependency>
+  <groupId>com.github.tandronicus</groupId>
+  <artifactId>ezperf4j</artifactId>
+  <version>0.1</version>
+</dependency>
+```
+
+If you're using gradle, add this dependency in you build.gradle:
+
+```
+implementation 'com.github.tandronicus:ezperf4j:0.1'
+```
 
 ## How to use
 
