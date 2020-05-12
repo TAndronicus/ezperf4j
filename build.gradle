@@ -1,8 +1,10 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'signing'
 }
 
-group 'ezperf'
+group 'com.github.tandronicus'
 version '0.1'
 
 sourceCompatibility = 1.8
@@ -19,4 +21,73 @@ dependencies {
 jar {
     archivesBaseName = 'ezperf4j'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.tandronicus'
+            artifactId = 'ezperf4j'
+            version = '0.1'
+
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+
+            pom {
+                name = 'ezperf4j'
+                description = 'Performance testing with Junit made eazy'
+                url = 'https://github.com/TAndronicus/ezperf4j'
+                licenses {
+                    license {
+                        name = 'GNU General Public License v3.0'
+                        url = 'https://github.com/TAndronicus/ezperf4j/blob/master/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'TAndronicus'
+                        name = 'Jedrzej Biedrzycki'
+                        email = 'jed.biedrzycki@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/TAndronicus/ezperf4j.git'
+                    developerConnection = 'scm:git:https://github.com/TAndronicus/ezperf4j.git'
+                    url = 'https://github.com/TAndronicus/ezperf4j'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'ezperf4j'
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username mavenUser
+                password mavenPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
