@@ -28,6 +28,12 @@ class AssertRunsWithinTest extends AbstractTest {
     }
 
     @Test
+    @Timing(800)
+    void shouldPassWhenFaterThanDurationDeclared() {
+        createRunable(700).run();
+    }
+
+    @Test
     void shouldFailWhenTimeExceedsMultipleTimes() {
         assertThrows(
                 AssertionFailedError.class,
