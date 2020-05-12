@@ -21,13 +21,9 @@ If you're using gradle, add this dependency in you build.gradle:
 implementation 'com.github.tandronicus:ezperf4j:0.1'
 ```
 
+ezperf4j currently works with junit 5.
+
 ## How to use
-
-All assertions are available in single class: 
-
-```
-import static ezperf.Assertions.*;
-```
 
 Prepare method you would like to test:
 
@@ -41,6 +37,34 @@ Runnable createRunable(long time) {
         }
     };
 }
+```
+
+### Declarative way
+
+```
+@Test
+@Timing(750)
+void shouldPassWhenFaterThanDurationDeclared() {
+    createRunable(700).run();
+}
+// Passes because the runnable executes within 750 ms
+```
+
+```
+@Test
+@Timing(550)
+void shouldPassWhenFaterThanDurationDeclared() {
+    createRunable(700).run();
+}
+// Does not pass because the runnable takes too long to execute
+```
+
+### Programmatic way
+
+All assertions are available in single class: 
+
+```
+import static ezperf.Assertions.*;
 ```
 
 Assert, that the computation runs within expected time (this won't interrupt the `Runnable`):
